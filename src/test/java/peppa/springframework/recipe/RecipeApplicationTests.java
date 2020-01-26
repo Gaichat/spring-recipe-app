@@ -1,0 +1,12 @@
+package java.peppa.springframework.recipe;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+class RecipeApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
