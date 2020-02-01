@@ -5,6 +5,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 public class Recipe {
 
     @Id
@@ -18,6 +19,8 @@ public class Recipe {
     private String url;
     private String directions;
     //private Difficulty diffisulty;
+
+    @Lob
     private Byte[] image;
 
     @OneToOne(cascade = CascadeType.ALL)

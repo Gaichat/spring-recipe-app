@@ -1,11 +1,9 @@
 package peppa.springframework.recipe.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Entity
 public class Ingredient {
 
     @Id
@@ -14,7 +12,10 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
-    @OneToMany
+    @ManyToOne
     private Recipe recipe;
+
+    @OneToOne (fetch = FetchType.EAGER)
+    private UnitOfMeasure uom;
 
 }

@@ -1,10 +1,8 @@
 package peppa.springframework.recipe.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+@Entity
 public class Notes {
 
     @Id
@@ -13,6 +11,8 @@ public class Notes {
 
     @OneToOne
     private Recipe recipe;
+
+    @Lob
     private String description;
 
     public Recipe getRecipe() {
