@@ -1,4 +1,4 @@
-package peppa.springframework.recipe.model;
+package main.peppa.springframework.recipe.model;
 
 import javax.persistence.*;
 
@@ -9,19 +9,18 @@ public class Notes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private Recipe recipe;
-
     @Lob
     private String description;
 
-    public Recipe getRecipe() {
-        return recipe;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public void setId(Long id) {
+        this.id = id;
     }
+
 
     public String getDescription() {
         return description;

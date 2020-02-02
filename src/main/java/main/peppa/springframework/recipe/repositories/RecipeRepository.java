@@ -1,7 +1,7 @@
-package peppa.springframework.recipe.repositories;
+package main.peppa.springframework.recipe.repositories;
 
+import main.peppa.springframework.recipe.model.Recipe;
 import org.springframework.data.repository.CrudRepository;
-import peppa.springframework.recipe.model.Recipe;
 
 public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 }
