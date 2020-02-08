@@ -1,5 +1,6 @@
 package main.peppa.springframework.recipe.bootstrap;
 
+import lombok.extern.slf4j.Slf4j;
 import main.peppa.springframework.recipe.model.*;
 import main.peppa.springframework.recipe.repositories.CategoryRepository;
 import main.peppa.springframework.recipe.repositories.RecipeRepository;
@@ -8,11 +9,13 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -26,8 +29,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
+    //w/o transactional : lazy initialization exception can happen because lazy fetch don't happen
+    //in the same hibernate transaction
+    @Transactional
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        log.debug("load data...");
         recipeRepository.saveAll(getRecipes());
     }
 
