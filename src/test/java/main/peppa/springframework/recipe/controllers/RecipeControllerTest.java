@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.mockito.Mockito.when;
 
 //done with JUNIT 5
 @ExtendWith(MockitoExtension.class)
@@ -53,19 +53,21 @@ class RecipeControllerTest {
         when(recipeService.findById(anyLong())).thenReturn(recipe);
 
         //perform test on controller with MockMvc
-        mockMvc.perform(get("/recipe/show/1"))
+        mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
     }
 
+    @Test
     void newRecipe() throws Exception {
-        mockMvc.perform(get("recipe/new"))
+        mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
                 .andExpect(model().attributeExists("recipe"));
     }
 
+    @Test
     void createRecipe() throws Exception {
         RecipeCommand command = new RecipeCommand();
         command.setId(2L);
@@ -78,6 +80,47 @@ class RecipeControllerTest {
                 .param("description", "some string")
         )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:show/2"));
+                .andExpect(view().name("redirect:/recipe/2/show"));
+    }
+
+    @Test
+    void getUpdateView() throws Exception {
+        RecipeCommand command = new RecipeCommand();
+        command.setId(2L);
+
+        when(recipeService.findCommandById((anyLong()))).thenReturn(command);
+
+        mockMvc.perform(get("/recipe/2/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/recipeform"))
+                .andExpect(model().attributeExists("recipe"));
+    }
+
+    @Test
+    void updateRecipe() throws Exception {
+        RecipeCommand command = new RecipeCommand();
+        command.setId(2L);
+        command.setDescription("toto");
+
+        when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+
+        mockMvc.perform(post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "2")
+                .param("description", "some string")
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/2/show"));
+                assertEquals("toto", command.getDescription());
+    }
+
+    @Test
+    void deleteRecipe() throws Exception {
+        mockMvc.perform(get("/recipe/1/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+
+        verify(recipeService, times(1)).deleteById(anyLong());
+
     }
 }
