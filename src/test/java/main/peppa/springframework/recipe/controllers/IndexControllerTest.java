@@ -17,6 +17,8 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 
 class IndexControllerTest {
 
@@ -39,7 +41,7 @@ class IndexControllerTest {
 
         //given
         String expectedPage = "index";
-                 /*
+        /*
         ArgumentCaptor is used to capture arguments for mocked methods.
         In this example, we are mocking the service and telling "when the mock recipeService.getRecipes()
         is called then the mock should return a Set of recipe".

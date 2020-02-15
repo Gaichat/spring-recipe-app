@@ -26,4 +26,11 @@ public class RecipeServieImpl implements RecipeService{
         return recipes;
     }
 
+    @Override
+    public Recipe findById(Long id) {
+        return this.getRecipes().stream()
+                .filter(recipe -> recipe.getId().equals(id))
+                .findFirst().orElse(null);
+    }
+
 }
