@@ -1,7 +1,9 @@
 package main.peppa.springframework.recipe.controllers;
 
+import main.peppa.springframework.recipe.commands.IngredientCommand;
 import main.peppa.springframework.recipe.commands.RecipeCommand;
 import main.peppa.springframework.recipe.model.Recipe;
+import main.peppa.springframework.recipe.services.IngredientService;
 import main.peppa.springframework.recipe.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,6 +29,9 @@ class IngredientControllerTest {
 
     @Mock
     RecipeService recipeService;
+
+    @Mock
+    IngredientService ingredientService;
 
     MockMvc mockMvc;
 
@@ -51,7 +56,24 @@ class IngredientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/list"))
                 .andExpect(model().attributeExists("recipe"));
+        verify(recipeService, times(1)).findCommandById(anyLong());
+    }
 
+    @Test
+    void showIngredient() throws Exception {
+        //given
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setId(1L);
+
+        //when
+        when(ingredientService.findCommandById(anyLong())).thenReturn(ingredientCommand);
+
+        //then
+        mockMvc.perform(get("/recipe/1/ingredient/1/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
+        verify(ingredientService,times(1)).findCommandById(anyLong());
     }
 
 
