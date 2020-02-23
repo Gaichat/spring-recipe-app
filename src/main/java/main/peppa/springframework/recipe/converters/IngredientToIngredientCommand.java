@@ -3,6 +3,8 @@ package main.peppa.springframework.recipe.converters;
 import lombok.Synchronized;
 import main.peppa.springframework.recipe.commands.IngredientCommand;
 import main.peppa.springframework.recipe.model.Ingredient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -28,8 +30,9 @@ public class IngredientToIngredientCommand implements Converter<Ingredient, Ingr
         ingredientCommand.setId(ingredient.getId());
         ingredientCommand.setAmount(ingredient.getAmount());
         ingredientCommand.setDescription(ingredient.getDescription());
-        //ingredientCommand.setRecipe(ingredient.getRecipe());
+        ingredientCommand.setRecipeId(ingredient.getRecipe().getId());
         ingredientCommand.setUom(uomConverter.convert(ingredient.getUom()));
         return ingredientCommand;
     }
+
 }

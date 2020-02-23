@@ -2,9 +2,11 @@ package main.peppa.springframework.recipe.controllers;
 
 import main.peppa.springframework.recipe.commands.IngredientCommand;
 import main.peppa.springframework.recipe.commands.RecipeCommand;
+import main.peppa.springframework.recipe.commands.UnitOfMeasureCommand;
 import main.peppa.springframework.recipe.model.Recipe;
 import main.peppa.springframework.recipe.services.IngredientService;
 import main.peppa.springframework.recipe.services.RecipeService;
+import main.peppa.springframework.recipe.services.UnitOfMeasureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -32,6 +37,9 @@ class IngredientControllerTest {
 
     @Mock
     IngredientService ingredientService;
+
+    @Mock
+    UnitOfMeasureService uomService;
 
     MockMvc mockMvc;
 
@@ -66,14 +74,34 @@ class IngredientControllerTest {
         ingredientCommand.setId(1L);
 
         //when
-        when(ingredientService.findCommandById(anyLong())).thenReturn(ingredientCommand);
+        when(ingredientService.findCommandByIdAndRecipeId(anyLong(), anyLong())).thenReturn(ingredientCommand);
 
         //then
         mockMvc.perform(get("/recipe/1/ingredient/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/show"))
                 .andExpect(model().attributeExists("ingredient"));
-        verify(ingredientService,times(1)).findCommandById(anyLong());
+        verify(ingredientService,times(1)).findCommandByIdAndRecipeId(anyLong(), anyLong());
+    }
+
+    @Test
+    void getUpdateIngredientView() throws Exception {
+        //given
+        Set<UnitOfMeasureCommand> uomCommand = new HashSet<>();
+        IngredientCommand ingredientCommand = new IngredientCommand();
+
+        //when
+        when(ingredientService.findCommandByIdAndRecipeId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+        when(uomService.findAll()).thenReturn(uomCommand);
+
+        //then
+        mockMvc.perform(get("/recipe/1/ingredient/1/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/ingredientform"))
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(model().attributeExists("uomList"));
+        verify(ingredientService,times(1)).findCommandByIdAndRecipeId(anyLong(), anyLong());
+        verify(uomService,times(1)).findAll();
     }
 
 

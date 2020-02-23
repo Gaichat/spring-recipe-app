@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
 
     private final CategoryToCategoryCommand categoryConveter;
-    private final IngredientToIngredientCommand ingredientConverter;
     private final NotesToNotesCommand notesConverter;
+    private final IngredientToIngredientCommand ingredientConverter;
 
     public RecipeToRecipeCommand(CategoryToCategoryCommand categoryConveter, IngredientToIngredientCommand ingredientConverter,
                                  NotesToNotesCommand notesConverter) {
         this.categoryConveter = categoryConveter;
-        this.ingredientConverter = ingredientConverter;
         this.notesConverter = notesConverter;
+        this.ingredientConverter = ingredientConverter;
     }
 
     @Synchronized
@@ -55,4 +55,5 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
 
         return command;
     }
+
 }

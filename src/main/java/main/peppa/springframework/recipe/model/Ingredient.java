@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @EqualsAndHashCode(exclude = "recipe")
-@ToString
 @RequiredArgsConstructor
 @Entity
 public class Ingredient {
