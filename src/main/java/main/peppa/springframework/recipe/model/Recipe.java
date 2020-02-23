@@ -9,14 +9,12 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode
-@RequiredArgsConstructor
 @Entity
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String description;
     private Integer prepTime;
     private Integer cookTime;
@@ -44,6 +42,8 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    public Recipe(){}
 
     public void setNotes(Notes notes) {
         this.notes = notes;

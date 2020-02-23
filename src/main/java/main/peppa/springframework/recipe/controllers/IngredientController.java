@@ -3,6 +3,8 @@ package main.peppa.springframework.recipe.controllers;
 import lombok.extern.slf4j.Slf4j;
 import main.peppa.springframework.recipe.commands.IngredientCommand;
 import main.peppa.springframework.recipe.commands.RecipeCommand;
+import main.peppa.springframework.recipe.commands.UnitOfMeasureCommand;
+import main.peppa.springframework.recipe.model.Ingredient;
 import main.peppa.springframework.recipe.services.IngredientService;
 import main.peppa.springframework.recipe.services.RecipeService;
 import main.peppa.springframework.recipe.services.UnitOfMeasureService;
@@ -60,5 +62,21 @@ public class IngredientController {
         log.info("toto"+ingredient.getRecipeId());
         IngredientCommand saved = ingredientService.save(ingredient);
         return "redirect:/recipe/" + saved.getRecipeId() + "/ingredient/"+ saved.getId() + "/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipe_id}/ingredient/new")
+    public String createIngredient(@PathVariable String recipe_id,
+                                 Model model){
+        //init new ingredient command with recipe id because its needed in hidden field
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipe_id));
+
+        //init uom
+        ingredientCommand.setUom(new UnitOfMeasureCommand());
+
+        model.addAttribute("ingredient", ingredientCommand);
+        model.addAttribute("uomList", uomService.findAll());
+        return "recipe/ingredient/ingredientform";
     }
 }
