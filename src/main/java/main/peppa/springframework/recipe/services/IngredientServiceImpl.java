@@ -8,10 +8,13 @@ import main.peppa.springframework.recipe.model.Ingredient;
 import main.peppa.springframework.recipe.model.Recipe;
 import main.peppa.springframework.recipe.repositories.RecipeRepository;
 import main.peppa.springframework.recipe.repositories.UnitOfMeasureRepository;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -115,4 +118,19 @@ public class IngredientServiceImpl implements IngredientService {
         log.info("findCommandByIdAndRecipeId "+recipe.getId());
         return ingredientCommandOptional.get();
     }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id, Long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(()-> new RuntimeException("recipe not found"));
+        Ingredient ingredient = recipe.getIngredients().stream()
+                .filter(in -> in.getId().equals(id))
+                .findFirst().orElseThrow(()-> new RuntimeException("ingredient not found"));
+        recipe.getIngredients().remove(ingredient);
+        //otherwise will recreate the ingredient
+        ingredient.setRecipe(null);
+        recipeRepository.save(recipe);
+    }
+
+
 }
