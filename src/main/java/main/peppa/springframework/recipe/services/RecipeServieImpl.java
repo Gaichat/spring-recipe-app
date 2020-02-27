@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import main.peppa.springframework.recipe.commands.RecipeCommand;
 import main.peppa.springframework.recipe.converters.RecipeCommandToRecipe;
 import main.peppa.springframework.recipe.converters.RecipeToRecipeCommand;
+import main.peppa.springframework.recipe.exceptions.NotFoundException;
 import main.peppa.springframework.recipe.model.Recipe;
 import main.peppa.springframework.recipe.repositories.RecipeRepository;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -41,7 +43,7 @@ public class RecipeServieImpl implements RecipeService{
     public Recipe findById(Long id) {
         return this.getRecipes().stream()
                 .filter(recipe -> recipe.getId().equals(id))
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(()->new NotFoundException("recipe id "+id.toString()+" not exist"));
     }
 
     @Override
