@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import main.peppa.springframework.recipe.commands.IngredientCommand;
 import main.peppa.springframework.recipe.commands.RecipeCommand;
 import main.peppa.springframework.recipe.commands.UnitOfMeasureCommand;
-import main.peppa.springframework.recipe.model.Ingredient;
 import main.peppa.springframework.recipe.services.IngredientService;
 import main.peppa.springframework.recipe.services.RecipeService;
 import main.peppa.springframework.recipe.services.UnitOfMeasureService;
@@ -38,7 +37,6 @@ public class IngredientController {
                                  @PathVariable String ingredient_id,
                                  Model model){
         model.addAttribute("ingredient", ingredientService.findCommandByIdAndRecipeId(Long.valueOf(ingredient_id),Long.valueOf(recipe_id)));
-        log.info("show ing "+ingredientService.findCommandByIdAndRecipeId(Long.valueOf(ingredient_id),Long.valueOf(recipe_id)).getRecipeId());
         return "recipe/ingredient/show";
     }
 
